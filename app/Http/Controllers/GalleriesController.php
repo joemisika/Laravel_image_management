@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 
 use App\Http\Requests\StoreGalleryRequest;
-use VisitAfrica\Helpers\FileUploads;
+use App\Http\Requests\UpdateGalleryRequest;
+use App\Helpers\FileUploads;
 
 class GalleriesController extends Controller
 {
@@ -54,7 +55,7 @@ class GalleriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreGalleryRequestRequest $request)
+    public function store(StoreGalleryRequest $request)
     {
         //$this->galleries->create($request->only('name', 'description', 'cover_image'));
         $gallery = new Gallery();
@@ -63,11 +64,16 @@ class GalleriesController extends Controller
             $newUpload = new FileUploads();
             //get $result back from FileUploads Helper
             $result = $newUpload->uploadFile($request->file('cover_image'));
-            //upload path
+            //upload path plus name of image
             $gallery->cover_image = $result[1].$result[0];
         }
 
-        return redirect('')->with('status', 'gallery has been created successfully!!!');
+        $gallery->name = $request->name;
+        $gallery->description = $request->description;
+        $gallery->save();
+
+        //redirect back to the form after successfully add the information
+        return redirect('galleries.create')->with('status', 'gallery has been created successfully!!!');
     }
 
     /**
@@ -89,7 +95,8 @@ class GalleriesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $gallery = $this->galleries->findorFail($id);
+        return view('galleries.form', compact('gallery'));
     }
 
     /**
@@ -99,7 +106,7 @@ class GalleriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateGalleryRequestRequest $request, $id)
     {
         //
     }
@@ -112,7 +119,9 @@ class GalleriesController extends Controller
      */
     public function confirm($id)
     {
+        $gallery = $this->galleries->findOrFail($id);
 
+        return view('galleries.confirm', compact('gallery'));
     }
 
 
@@ -124,6 +133,11 @@ class GalleriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $gallery = $this->galleries->findOrFail($id);
+
+        $gallery->delete();
+
+        return redirect(route('galleries.index'))
+            ->with('status', 'Gallery has been deleted');
     }
 }
