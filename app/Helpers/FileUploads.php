@@ -1,6 +1,6 @@
 <?php
 
-namespace VisitAfrica\Helpers;
+namespace App\Helpers;
 
 use File;
 use Image;
@@ -14,10 +14,10 @@ class FileUploads {
      */
     public function uploadFile($fileName)
     {
-        //New directory goes into uploads then becomes year/month/date like facebook
+        //New directory goes into uploads then becomes year/month/date like how you can set it up on wordpress for easier image management
         $upload_dir = 'uploads/'.date('Y').'/'.date('m').'/'.date('d').'/';
 
-        //check if the file exists and if it doesn't create a new one
+        //check if the file for a given day exists and if it doesn't create a new one and give it permissions
         if(!file_exists($upload_dir))
         {
             $result = File::makeDirectory('uploads/'.date('Y').'/'.date('m').'/'.date('d').'/', 0775, true);
