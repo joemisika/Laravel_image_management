@@ -29,9 +29,9 @@
         <div class="col-lg-12">
             <h3>@yield('title')</h3>
 
-            {{--@include('common.errors')--}}
+            @include('common.errors')
 
-            {{--@include('common.status')--}}
+            @include('common.status')
 
             @yield('content')
 
