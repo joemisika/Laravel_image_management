@@ -19,7 +19,7 @@ class GalleriesController extends Controller
     {
         $this->galleries = $galleries;
 
-        parent::__construct();
+        //parent::__construct();
     }
 
 
@@ -69,11 +69,12 @@ class GalleriesController extends Controller
         }
 
         $gallery->name = $request->name;
+        $gallery->slug = str_slug($gallery->name);
         $gallery->description = $request->description;
         $gallery->save();
 
         //redirect back to the form after successfully add the information
-        return redirect('galleries.create')->with('status', 'gallery has been created successfully!!!');
+        return redirect(route('galleries.create'))->with('status', 'gallery has been created successfully!!!');
     }
 
     /**
@@ -134,6 +135,10 @@ class GalleriesController extends Controller
     public function destroy($id)
     {
         $gallery = $this->galleries->findOrFail($id);
+
+        //$files = [];
+
+        //File::delete($gallery->cover_image);
 
         $gallery->delete();
 
