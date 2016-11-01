@@ -24,9 +24,9 @@ class StoreGalleryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>['required|max:255|unique:galleries'],
-            'description'=>['required|min:20'],
-            'cover_image'=>['required|mimes:jpeg,jpg'],
+            'name'=>'required|max:255|unique:galleries',
+            'description'=>'required|min:5',
+            'cover_image'=>'required|mimes:jpeg,jpg',
         ];
     }
 }
