@@ -65,7 +65,8 @@ class GalleriesController extends Controller
             //get $result back from FileUploads Helper
             $result = $newUpload->uploadFile($request->file('cover_image'));
             //upload path plus name of image
-            $gallery->cover_image = $result[1].$result[0];
+            $gallery->cover_image = $result[0];
+            $gallery->upload_path = $result[1];
         }
 
         $gallery->name = $request->name;
