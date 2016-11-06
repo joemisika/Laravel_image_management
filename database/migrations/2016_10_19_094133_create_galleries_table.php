@@ -18,6 +18,7 @@ class CreateGalleriesTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description');
+            $table->string('upload_path');
             $table->string('cover_image');
             $table->timestamps();
         });
