@@ -16,6 +16,7 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('gallery_id')->unsigned();
+            $table->string('upload_path');
             $table->string('image');
             $table->string('title');
             $table->text('description');
