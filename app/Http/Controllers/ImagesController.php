@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\Image;
+use App\Gallery;
 use App\Http\Requests\StoreImageRequest;
 use App\Http\Requests\UpdateImageRequest;
 
@@ -20,7 +22,7 @@ class ImagesController extends Controller
     {
         $this->images = $images;
 
-        parent::__construct();
+        //parent::__construct();
     }
 
 
@@ -160,7 +162,6 @@ class ImagesController extends Controller
     protected function getGalleries()
     {
         $galleries = Gallery::lists('name', 'id');
-
         return $galleries;
     }
 }
