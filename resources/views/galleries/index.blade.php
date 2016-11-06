@@ -7,7 +7,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <td>Title</td>
+            <td>Name</td>
             <td>Slug</td>
             <td>Cover Image</td>
             <td>Edit</td>
@@ -22,16 +22,16 @@
         @else
             @foreach($galleries as $gallery)
         <tr>
-            <td>{{ $gallery->title }}</td>
+            <td>{{ $gallery->name }}</td>
             <td>{{ $gallery->slug }}</td>
             <td>
-                <img src="" alt="">
+                {{ Html::image($gallery->cover_image, '', array('class'=>'img-responsive')) }}
             </td>
             <td>
-                <a href="{{ route('galleries.edit'.$gallery->id) }}">Edit</a>
+                <a href="{{ route('galleries.edit', $gallery->id) }}">Edit</a>
             </td>
             <td>
-                <a href="{{ route('galleries.confirm'.$gallery->id) }}">Delete</a>
+                <a href="{{ route('galleries.confirm', $gallery->id) }}">Delete</a>
             </td>
         </tr>
             @endforeach
