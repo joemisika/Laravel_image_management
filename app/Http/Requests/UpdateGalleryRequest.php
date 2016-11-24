@@ -24,9 +24,9 @@ class UpdateGalleryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>['required|unique:countries,name,'.$gallery->id],
-            'description'=>['required|min:20'],
-            'cover_image'=>['sometimes|mimes:jpeg,jpg'],
+            'name'=>'required|max:255|unique:galleries',
+            'description'=>'required|min:20',
+            'cover_image'=>'sometimes|mimes:jpeg,jpg',
         ];
     }
 }
