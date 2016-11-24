@@ -13,93 +13,89 @@ use App\Helpers\FileUploads;
 
 class GalleriesController extends Controller
 {
-    protected $galleries;
+   protected $galleries;
 
-    public function __construct(Gallery $galleries)
-    {
-        $this->galleries = $galleries;
+   public function __construct(Gallery $galleries)
+   {
+      $this->galleries = $galleries;
+   }
 
-        //parent::__construct();
-    }
+   /**
+   * Display a listing of the galleries.
+   *
+   * @return \Illuminate\Http\Response
+   */
+   public function index()
+   {
+      //You can then use it like this
+      //$galleries = Gallery::with('Images')->get();
 
+      //OR like this especially if you are coming from a CI background
+      $galleries = $this->galleries->with('Images')->get();
 
-    /**
-     * Display a listing of the galleries.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //You can then use it like this
-        //$galleries = Gallery::with('Images')->get();
+      return view('galleries.index', compact('galleries'));
+   }
 
-        //OR like this especially if you are coming from a CI background
-        $galleries = $this->galleries->with('Images')->get();
+   /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+   public function create(Gallery $gallery)
+   {
+      return view('galleries.form', compact('gallery'));
+   }
 
-        return view('galleries.index', compact('galleries'));
-    }
+   /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+   public function store(StoreGalleryRequest $request)
+   {
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Gallery $gallery)
-    {
-        return view('galleries.form', compact('gallery'));
-    }
+      $gallery = new Gallery();
+      if($request->hasFile('cover_image'))
+      {
+         $newUpload = new FileUploads();
+         //get $result back from FileUploads Helper
+         $result = $newUpload->uploadFile($request->file('cover_image'));
+         //upload path plus name of image
+         $gallery->cover_image = $result[1].$result[0];
+      }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreGalleryRequest $request)
-    {
-        //$this->galleries->create($request->only('name', 'description', 'cover_image'));
-        $gallery = new Gallery();
-        if($request->hasFile('cover_image'))
-        {
-            $newUpload = new FileUploads();
-            //get $result back from FileUploads Helper
-            $result = $newUpload->uploadFile($request->file('cover_image'));
-            //upload path plus name of image
-            $gallery->cover_image = $result[1].$result[0];
-            //$gallery->upload_path = $result[1];
-        }
+      $gallery->name = $request->name;
+      $gallery->slug = str_slug($gallery->name);
+      $gallery->description = $request->description;
+      $gallery->save();
 
-        $gallery->name = $request->name;
-        $gallery->slug = str_slug($gallery->name);
-        $gallery->description = $request->description;
-        $gallery->save();
+      //redirect back to the form after successfully add the information
+      return redirect(route('galleries.create'))->with('status', 'gallery has been created successfully!!!');
+   }
 
-        //redirect back to the form after successfully add the information
-        return redirect(route('galleries.create'))->with('status', 'gallery has been created successfully!!!');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
+   /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+   public function show($id)
+   {
         //
-    }
+   }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $gallery = $this->galleries->findorFail($id);
-        return view('galleries.form', compact('gallery'));
-    }
+   /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+   public function edit($id)
+   {
+      $gallery = $this->galleries->findorFail($id);
+      return view('galleries.form', compact('gallery'));
+   }
 
    /**
    * Update the specified resource in storage.
@@ -137,9 +133,9 @@ class GalleriesController extends Controller
    public function confirm($id)
    {
       $gallery = $this->galleries->findOrFail($id);
+
       return view('galleries.confirm', compact('gallery'));
    }
-
 
    /**
    * Remove the specified resource from storage.
@@ -151,11 +147,10 @@ class GalleriesController extends Controller
    {
       $gallery = $this->galleries->findOrFail($id);
 
-        //$files = [];
+      //$files = [];
+      //File::delete($gallery->cover_image);
 
-        //File::delete($gallery->cover_image);
-
-        $gallery->delete();
+      $gallery->delete();
 
       return redirect(route('galleries.index'))
          ->with('status', 'Gallery has been deleted');
