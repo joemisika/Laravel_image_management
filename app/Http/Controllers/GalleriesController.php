@@ -65,8 +65,8 @@ class GalleriesController extends Controller
             //get $result back from FileUploads Helper
             $result = $newUpload->uploadFile($request->file('cover_image'));
             //upload path plus name of image
-            $gallery->cover_image = $result[0];
-            $gallery->upload_path = $result[1];
+            $gallery->cover_image = $result[1].$result[0];
+            //$gallery->upload_path = $result[1];
         }
 
         $gallery->name = $request->name;
@@ -101,41 +101,55 @@ class GalleriesController extends Controller
         return view('galleries.form', compact('gallery'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateGalleryRequestRequest $request, $id)
-    {
-        //
-    }
+   /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+	public function update(UpdateGalleryRequest $request, $id)
+	{
+		$gallery = $this->galleries->findorFail($id);
+		if($request->hasFile())
+		{
+			$newUpload = new FileUploads();
+			//get $result back from FileUploads Helper
+         $result = $newUpload->uploadFile($request->file('cover_image'));
+         //upload path plus name of image
+         $gallery->cover_image = $result[1].$result[0];
+		}
 
-    /**
-     * Confirm that you want to delete specified resource
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function confirm($id)
-    {
-        $gallery = $this->galleries->findOrFail($id);
+		$gallery->name = $request->name;
+      $gallery->slug = str_slug($gallery->name);
+      $gallery->description = $request->description;
+      $gallery->save();
 
-        return view('galleries.confirm', compact('gallery'));
-    }
+      return redirect(route('galleries.edit', $gallery->id))->with('status', 'Gallery has been edited successfully');
+	}
+
+   /**
+   * Confirm that you want to delete specified resource
+   *
+   * @param int $id
+   * @return \Illuminate\Http\Response
+   */
+   public function confirm($id)
+   {
+      $gallery = $this->galleries->findOrFail($id);
+      return view('galleries.confirm', compact('gallery'));
+   }
 
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $gallery = $this->galleries->findOrFail($id);
+   /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+   public function destroy($id)
+   {
+      $gallery = $this->galleries->findOrFail($id);
 
         //$files = [];
 
@@ -143,7 +157,7 @@ class GalleriesController extends Controller
 
         $gallery->delete();
 
-        return redirect(route('galleries.index'))
-            ->with('status', 'Gallery has been deleted');
-    }
+      return redirect(route('galleries.index'))
+         ->with('status', 'Gallery has been deleted');
+   }
 }
