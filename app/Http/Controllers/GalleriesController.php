@@ -111,7 +111,7 @@ class GalleriesController extends Controller
 	public function update(UpdateGalleryRequest $request, $id)
 	{
 		$gallery = $this->galleries->findorFail($id);
-		if($request->hasFile())
+		if($request->hasFile('cover_image'))
 		{
 			$newUpload = new FileUploads();
 			//get $result back from FileUploads Helper
