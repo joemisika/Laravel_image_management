@@ -5,9 +5,9 @@
 @section('content')
 	{!! Form::open(['method' => 'delete', 'route' => ['galleries.destroy', $gallery->id]]) !!}
 		<div class="alert alert-danger">
-			<strong>Warning!</strong> You are about to delete {{ $gallery->name }}. This action cannot be undone. Are you sure you want to continue?
+			<strong>Warning!</strong> You are about to delete "{{ $gallery->name }}". This action cannot be undone. Are you sure you want to continue?
 		</div>
-		{!! Form::submit('Yes, delete this Gallery'), ['class' => 'btn btn-danger'] !!}
+		{!! Form::submit('Yes, delete this Gallery', ['class' => 'btn btn-danger']) !!}
 
 		<a href="{{ route('galleries.index') }}" class="btn btn-success">
 			<strong>No, get me out of here!</strong>
