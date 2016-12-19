@@ -39,43 +39,44 @@ class ImagesController extends Controller
         return view('images.index', compact('images'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Image $image)
-    {
-        $galleries = $this->getGalleries();
-        return view('images.form', compact('image', 'galleries'));
-    }
+   /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+   public function create(Image $image)
+   {
+      $galleries = $this->getGalleries();
+      //print_r($galleries);
+      return view('images.form', compact('image', 'galleries'));
+   }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreImageRequest $request)
-    {
-        $image = new Image();
-        if($request->hasFile('image'))
-        {
-            $newUpload = new FileUploads();
-            //get $result back from FileUploads Helper
-            $result = $newUpload->uploadFile($request->file('image'));
-            //upload path plus name of image
-            $image->image = $result[1].$result[0];
-        }
+   /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+   public function store(StoreImageRequest $request)
+   {
+      $image = new Image();
+      if($request->hasFile('image'))
+      {
+         $newUpload = new FileUploads();
+         //get $result back from FileUploads Helper
+         $result = $newUpload->uploadFile($request->file('image'));
+         //upload path plus name of image
+         $image->image = $result[1].$result[0];
+      }
 
-        $image->name = $request->title;
-        $image->description = $request->description;
-        $image->image_credit = $request->image_credit;
-        $image->save();
+      $image->name = $request->title;
+      $image->description = $request->description;
+      $image->image_credit = $request->image_credit;
+      $image->save();
 
         //redirect back to the form after successfully add the information
-        return redirect('galleries.create')->with('status', 'gallery has been created successfully!!!');
-    }
+      return redirect('galleries.create')->with('status', 'gallery has been created successfully!!!');
+   }
 
     /**
      * Display the specified resource.
@@ -98,6 +99,7 @@ class ImagesController extends Controller
     {
         $image = $this->images->findorFail($id);
         $galleries = $this->getGalleries();
+
         return view('galleries.form', compact('image', 'galleries'));
     }
 
@@ -159,9 +161,14 @@ class ImagesController extends Controller
             ->with('status', 'Image has been deleted');
     }
 
-    protected function getGalleries()
-    {
-        $galleries = Gallery::lists('name', 'id');
-        return $galleries;
-    }
+   /*
+   * Create a lists of available galleries
+   *
+   * @return array()
+   */
+   protected function getGalleries()
+   {
+      $galleries = Gallery::pluck('name', 'id');
+      return $galleries;
+   }
 }
