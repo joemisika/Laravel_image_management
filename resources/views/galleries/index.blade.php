@@ -25,7 +25,7 @@
             <td>{{ $gallery->name }}</td>
             <td>{{ $gallery->slug }}</td>
             <td>
-                {{ Html::image($gallery->cover_image, '', array('class'=>'img-responsive')) }}
+                {{ Html::image($gallery->cover_image, '', array('class'=>'img-responsive', 'width'=>'200px')) }}
             </td>
             <td>
                 <a href="{{ route('galleries.edit', $gallery->id) }}">Edit</a>
