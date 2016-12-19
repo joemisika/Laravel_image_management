@@ -17,8 +17,8 @@
         {{-- </div> --}}
     </div>
 
-		@if($image->cover_image)
-       	{{ Html::image($image->image, '', array('class'=>'img-responsive')) }}
+		@if($image->image)
+       	{{ Html::image($image->image, '', array('class'=>'img-responsive', 'height'=>'250px', 'width'=>'250px')) }}
     	@endif
 		<div class="form-group">
       	{{ Form::file('image') }}
