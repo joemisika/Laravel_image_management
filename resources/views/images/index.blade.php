@@ -8,7 +8,7 @@
         <thead>
         <tr>
             <td>Name</td>
-            <td>Slug</td>
+            {{-- <td>Slug</td> --}}
             <td>Image</td>
             <td>Gallery</td>
             <td>Edit</td>
@@ -23,17 +23,17 @@
         @else
             @foreach($images as $image)
         <tr>
-            <td>{{ $image->name }}</td>
-            <td>{{ $image->slug }}</td>
+            <td>{{ $image->title }}</td>
+            {{-- <td>{{ $image->slug }}</td> --}}
             <td>
-                {{ Html::image($image->image, '', array('class'=>'img-responsive')) }}
+                {{ Html::image($image->image, '', array('class'=>'img-responsive', 'width'=>'200px')) }}
             </td>
-            <td>{{ $image->gallery_id }}</td>
+            <td>{{ $image->gallery->name }}</td>
             <td>
                 <a href="{{ route('images.edit', $image->id) }}">Edit</a>
             </td>
             <td>
-                <a href="{{ route('images.confirm', $gallery->id) }}">Delete</a>
+                <a href="{{ route('images.confirm', $image->id) }}">Delete</a>
             </td>
         </tr>
             @endforeach
