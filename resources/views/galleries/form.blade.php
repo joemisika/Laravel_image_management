@@ -4,11 +4,7 @@
 
 @section('content')
 
-    {!! Form::model($gallery, [
-        'class'=>'form-horizontal',
-        'method'=> $gallery->exists ? 'put' : 'post',
-        'route'=>$gallery->exists ? ['galleries.update', $gallery->id]: ['galleries.store'], 'files'=>true ])
-    !!}
+   {!! Form::model($gallery, ['class'=>'form-horizontal', 'method'=> $gallery->exists ? 'put' : 'post', 'route'=>$gallery->exists ? ['galleries.update', $gallery->id]: ['galleries.store'], 'files'=>true ])!!}
 
     <div class="form-group">
         {!! Form::label('name', 'Name:') !!}
@@ -22,7 +18,7 @@
     <div class="form-group">
         {{ Form::file('cover_image') }}
     </div>
-    
+
     <div class="form-group">
         {!! Form::label('description', 'Description:') !!}
         {!! Form::textarea('description', null, ['class'=>'form-control', 'id'=>'description']) !!}
