@@ -12,7 +12,7 @@
     </div>
 
     @if($gallery->cover_image)
-       {{ Html::image($gallery->cover_image, '', array('class'=>'img-responsive')) }}
+       {{ Html::image($gallery->cover_image, '', array('class'=>'img-responsive', 'width'=>'200px')) }}
     @endif
 
     <div class="form-group">
