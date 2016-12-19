@@ -10,8 +10,8 @@ class Gallery extends Model
 
     protected $fillable = ['name', 'slug', 'description', 'upload_path', 'cover_image'];
 
-    public function Images()
-    {
-        return $this->hasMany(Image::class);
-    }
+   public function Images()
+   {
+      return $this->hasMany('App/Image', 'gallery_id');
+   }
 }
